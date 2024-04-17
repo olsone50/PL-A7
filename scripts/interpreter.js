@@ -34,12 +34,24 @@ function applyPrimitive(prim,args) {
     case "+": 
         typeCheckPrimitiveOp(prim,args,[E.isNum,E.isNum]);
         return E.createNum( E.getNumValue(args[0]) + E.getNumValue(args[1]));
+    case "-": 
+        typeCheckPrimitiveOp(prim,args,[E.isNum,E.isNum]);
+        return E.createNum( E.getNumValue(args[0]) - E.getNumValue(args[1]));
     case "*": 
         typeCheckPrimitiveOp(prim,args,[E.isNum,E.isNum]);
         return E.createNum( E.getNumValue(args[0]) * E.getNumValue(args[1]));
+    case "/": 
+        typeCheckPrimitiveOp(prim,args,[E.isNum,E.isNum]);
+        return E.createNum( E.getNumValue(args[0]) / E.getNumValue(args[1]));
+    case "%": 
+        typeCheckPrimitiveOp(prim,args,[E.isNum,E.isNum]);
+        return E.createNum( E.getNumValue(args[0]) % E.getNumValue(args[1]));
     case "add1": 
         typeCheckPrimitiveOp(prim,args,[E.isNum]);
         return E.createNum( 1 + E.getNumValue(args[0]) );
+    case "~": 
+        typeCheckPrimitiveOp(prim,args,[E.isNum]);
+        return E.createNum( - E.getNumValue(args[0]) );
     }
 }
 function evalExp(exp,envir) {
@@ -69,11 +81,17 @@ function evalExp(exp,envir) {
         else {
             throw f + " is not a closure and thus cannot be applied.";
         }
-    } else if (A.isPrimAppExp(exp)) {
-        return applyPrimitive(A.getPrimAppExpPrim(exp),
-                              SLang.absyn.getPrimAppExpArgs(exp).map(
+    } else if (A.isPrim1AppExp(exp)) {
+        return applyPrimitive(A.getPrim1AppExpPrim(exp),
+                              SLang.absyn.getPrim1AppExpArg(exp).map(
                                                            function(arg) { 
                                   return evalExp(arg,envir); } ));
+    } else if (A.isPrim2AppExp(exp)) {
+        return applyPrimitive(A.getPrim2AppExpPrim(exp),
+            SLang.absyn.getPrim2AppExpArgs(exp).map(
+                function (arg) {
+                    return evalExp(arg, envir);
+                }));
     } else {
         throw "Error: Attempting to evaluate an invalid expression";
     }

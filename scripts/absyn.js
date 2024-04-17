@@ -92,26 +92,48 @@ function getAppExpArgs(e) {
                         "The argument of getAppExpArgs is not an AppExp.");
     }
 }
-function createPrimAppExp(prim,args) {
-    return ["PrimAppExp",prim,args];
+function createPrim1AppExp(prim,arg) {
+    return ["Prim1AppExp",prim,arg];
 }
-function isPrimAppExp(e) { 
-    return e[0] === "PrimAppExp"; 
+function isPrim1AppExp(e) { 
+    return e[0] === "Prim1AppExp"; 
 }
-function getPrimAppExpPrim(e) { 
-    if (isPrimAppExp(e)) {
+function getPrim1AppExpPrim(e) { 
+    if (isPrim1AppExp(e)) {
         return e[1];
     } else {
         throw new Error("Interpreter error: The "  +
-                        "argument of getPrimAppExpPrim is not a PrimAppExp.");
+                        "argument of getPrim1AppExpPrim is not a Prim1AppExp.");
     }
 }
-function getPrimAppExpArgs(e) { 
-    if (isPrimAppExp(e)) {
-        return e[2];
+function getPrim1AppExpArg(e) { 
+    if (isPrim1AppExp(e)) {
+        return [e[2]];
     } else {
         throw new Error("Interpreter error: The "  +
-                        "argument of getPrimAppExpArgs is not a PrimAppExp.");
+                        "argument of getPrim1AppExpArg is not a Prim1AppExp.");
+    }
+}
+function createPrim2AppExp(prim,arg1,arg2) {
+    return ["Prim2AppExp",prim,arg1,arg2];
+}
+function isPrim2AppExp(e) { 
+    return e[0] === "Prim2AppExp"; 
+}
+function getPrim2AppExpPrim(e) { 
+    if (isPrim2AppExp(e)) {
+        return e[1];
+    } else {
+        throw new Error("Interpreter error: The "  +
+                        "argument of getPrim2AppExpPrim is not a Prim2AppExp.");
+    }
+}
+function getPrim2AppExpArgs(e) { 
+    if (isPrim2AppExp(e)) {
+        return [e[2],e[3]];
+    } else {
+        throw new Error("Interpreter error: The "  +
+                        "argument of getPrim2AppExpArgs is not a Prim2AppExp.");
     }
 }
 
@@ -132,10 +154,14 @@ exports.createAppExp = createAppExp;
 exports.isAppExp = isAppExp;
 exports.getAppExpFn = getAppExpFn;
 exports.getAppExpArgs = getAppExpArgs;
-exports.createPrimAppExp = createPrimAppExp;
-exports.isPrimAppExp = isPrimAppExp;
-exports.getPrimAppExpPrim = getPrimAppExpPrim;
-exports.getPrimAppExpArgs = getPrimAppExpArgs;
+exports.createPrim1AppExp = createPrim1AppExp;
+exports.isPrim1AppExp = isPrim1AppExp;
+exports.getPrim1AppExpPrim = getPrim1AppExpPrim;
+exports.getPrim1AppExpArg = getPrim1AppExpArg;
+exports.createPrim2AppExp = createPrim2AppExp;
+exports.isPrim2AppExp = isPrim2AppExp;
+exports.getPrim2AppExpPrim = getPrim2AppExpPrim;
+exports.getPrim2AppExpArgs = getPrim2AppExpArgs;
 
 window.SLang.absyn = exports;
 }());
