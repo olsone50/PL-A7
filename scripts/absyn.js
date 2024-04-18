@@ -137,6 +137,22 @@ function getPrim2AppExpArgs(e) {
     }
 }
 
+//Problem 2
+    function createBoolExp(b) { 
+        return ["BoolExp", b]; 
+    }
+    function isBoolExp(e) { 
+        return e[0] === "BoolExp"; 
+    }
+    function getBoolExpValue(e) { 
+        if (isBoolExp(e)) {
+            return e[1];
+        } else {
+            throw new Error("Interpreter error: "  +
+                            "The argument of getBoolExpValue is not a BoolExp.");
+        }
+    }
+
 exports.createProgram = createProgram;
 exports.isProgram = isProgram;
 exports.getProgramExp = getProgramExp;
@@ -162,6 +178,9 @@ exports.createPrim2AppExp = createPrim2AppExp;
 exports.isPrim2AppExp = isPrim2AppExp;
 exports.getPrim2AppExpPrim = getPrim2AppExpPrim;
 exports.getPrim2AppExpArgs = getPrim2AppExpArgs;
+exports.createBoolExp = createBoolExp;
+exports.isBoolExp = isBoolExp;
+exports.getBoolExpValue = getBoolExpValue;    
 
 window.SLang.absyn = exports;
 }());
