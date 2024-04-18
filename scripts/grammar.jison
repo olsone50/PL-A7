@@ -13,7 +13,11 @@ LETTER                [a-zA-Z]
 "("                                   { return 'LPAREN'; }
 ")"                                   { return 'RPAREN'; }
 "+"                                   { return 'PLUS'; }
+"-"                                   { return 'MINUS'}
 "*"                                   { return 'TIMES'; }
+"/"                                   { return 'DIV'; }
+"%"                                   { return 'REM'; }
+"~"                                   { return 'NEG'; }
 "add1"                                { return 'ADD1'; }
 ","                                   { return 'COMMA'; }
 "=>"                                  { return 'THATRETURNS'; }
@@ -38,7 +42,8 @@ exp
     | intlit_exp    { $$ = $1; }
     | fn_exp        { $$ = $1; }
     | app_exp       { $$ = $1; }    
-    | prim_app_exp  { $$ = $1; }
+    | prim_app_exp1 { $$ = $1; }
+    | prim_app_exp2 { $$ = $1; }
     ;
 
 var_exp
@@ -81,15 +86,27 @@ app_exp
           $$ = SLang.absyn.createAppExp($2,$3); }
     ;
 
-prim_app_exp
-    : prim_op LPAREN prim_args RPAREN
-       { $$ = SLang.absyn.createPrimAppExp($1,$3); }
+prim_app_exp1
+    : prim_op1 LPAREN prim_args RPAREN
+       { $$ = SLang.absyn.createPrim1AppExp($1,$3); }
     ;
 
-prim_op
-    :  PLUS     { $$ = $1; }
-    |  TIMES    { $$ = $1; }
+prim_op1
+    :  NEG      { $$ = $1; }
     |  ADD1     { $$ = $1; }
+    ;
+
+prim_app_exp2
+    : LPAREN prim_args prim_op2 prim_args RPAREN
+       { $$ = SLang.absyn.createPrim2AppExp($3,$2,$4); }
+    ;
+
+prim_op2
+    :  PLUS     { $$ = $1; }
+    |  MINUS    { $$ = $1; }
+    |  TIMES    { $$ = $1; }
+    |  DIV      { $$ = $1; }
+    |  REM      { $$ = $1; }
     ;
 
 args
@@ -108,13 +125,7 @@ args
 
 prim_args
     :  /* empty */ { $$ = [ ]; }
-    |  exp more_prim_args    { $2.unshift($1); $$ = $2; }
-    ;
-
-more_prim_args
-    : /* empty */ { $$ = [ ] }
-    | COMMA exp more_prim_args { $3.unshift($2); $$ = $3; }
+    |  exp         { $$ = $1; }
     ;
 
 %%
-
