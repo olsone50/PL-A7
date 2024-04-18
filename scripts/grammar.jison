@@ -12,6 +12,8 @@ LETTER                [a-zA-Z]
 "fn"                                  { return 'FN'; }
 "("                                   { return 'LPAREN'; }
 ")"                                   { return 'RPAREN'; }
+"["                                   { return 'LBRAC'; }
+"]"                                   { return 'RBRAC'; }
 "+"                                   { return 'PLUS'; }
 "-"                                   { return 'MINUS'}
 "*"                                   { return 'TIMES'; }
@@ -19,6 +21,9 @@ LETTER                [a-zA-Z]
 "%"                                   { return 'REM'; }
 "~"                                   { return 'NEG'; }
 "add1"                                { return 'ADD1'; }
+"hd"                                  { return 'HD'; }
+"tl"                                  { return 'TL'; }
+"isNull"                              { return 'ISNULL'; }
 ","                                   { return 'COMMA'; }
 "=>"                                  { return 'THATRETURNS'; }
 "<"                                   { return 'LT'; }
@@ -49,7 +54,8 @@ exp
     | prim_app_exp1 { $$ = $1; }
     | prim_app_exp2 { $$ = $1; }
     | prim_app_exp  { $$ = $1; }
-    | bool_exp       { $$ = $1; }
+    | bool_exp      { $$ = $1; }
+    | list_exp      { $$ = $1; }
     ;
 
 var_exp
@@ -67,7 +73,7 @@ fn_exp
 
 formals
     : /* empty */ { $$ = [ ]; }
-    | VAR moreformals 
+    | INT moreformals 
         { var result;
           if ($2 === [ ])
              result = [ $1 ];
@@ -81,7 +87,7 @@ formals
 
 moreformals
     : /* empty */ { $$ = [ ] }
-    | COMMA VAR moreformals 
+    | COMMA INT moreformals 
        { $3.unshift($2); 
          $$ = $3; }
     ;
@@ -101,6 +107,9 @@ prim_op1
     : NEG      { $$ = $1; }
     | ADD1     { $$ = $1; }
     | NOT      { $$ = $1; }
+    | HD       { $$ = $1; }
+    | TL       { $$ = $1; }
+    | ISNULL   { $$ = $1; }
     ;
 
 prim_app_exp2
@@ -111,6 +120,11 @@ prim_app_exp2
 bool_exp
     : "true"         { $$ = SLang.absyn.createBoolExp(true); }
     | "false"        { $$ = SLang.absyn.createBoolExp(false); }
+    ;
+
+list_exp
+    : prim_op1 LPAREN LBRAC prim_args RBRAC RPAREN
+        { $$ = SLang.absyn.createListExp($1,$4)}
     ;
 
 prim_op2
@@ -142,5 +156,4 @@ prim_args
     :  /* empty */ { $$ = [ ]; }
     |  exp         { $$ = $1; }
     ;
-
 %%
