@@ -20,6 +20,10 @@ LETTER                [a-zA-Z]
 "add1"                                { return 'ADD1'; }
 ","                                   { return 'COMMA'; }
 "=>"                                  { return 'THATRETURNS'; }
+"<"                                   { return 'LT'; }
+">"                                   { return 'GT'; }
+"==="                                 { return 'EQ'; }
+"not"                                 { return 'NOT'; }
 <<EOF>>                               { return 'EOF'; }
 {LETTER}({LETTER}|{DIGIT}|_)*         { return 'VAR'; }
 {DIGIT}+                              { return 'INT'; }
