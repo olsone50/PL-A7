@@ -10,9 +10,12 @@ LETTER                [a-zA-Z]
 
 \s+                                   { /* skip whitespace */ }
 "fn"                                  { return 'FN'; }
+"~"                                   { return 'NEG'; }
 "("                                   { return 'LPAREN'; }
 ")"                                   { return 'RPAREN'; }
 "+"                                   { return 'PLUS'; }
+"-"                                   { return 'MINUS'; }
+"/"                                   { return 'DIVIDE'; }
 "*"                                   { return 'TIMES'; }
 "add1"                                { return 'ADD1'; }
 ","                                   { return 'COMMA'; }
@@ -87,8 +90,11 @@ prim_app_exp
     ;
 
 prim_op
-    :  PLUS     { $$ = $1; }
+    :  NEG      { $$ = $1; }
+    |  PLUS     { $$ = $1; }
+    |  MINUS    { $$ = $1; }
     |  TIMES    { $$ = $1; }
+    |  DIVIDE   { $$ = $1; }
     |  ADD1     { $$ = $1; }
     ;
 
