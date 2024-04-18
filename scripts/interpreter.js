@@ -51,7 +51,7 @@ function applyPrimitive(prim,args) {
         return E.createNum( 1 + E.getNumValue(args[0]) );
     case "~": 
         typeCheckPrimitiveOp(prim,args,[E.isNum]);
-        return E.createNum( - E.getNumValue(args[0]) );
+        return E.createNum( -(E.getNumValue(args[0])) );
     }
 }
 function evalExp(exp,envir) {
