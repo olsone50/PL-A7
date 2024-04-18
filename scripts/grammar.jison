@@ -98,8 +98,9 @@ prim_app_exp1
     ;
 
 prim_op1
-    :  NEG      { $$ = $1; }
-    |  ADD1     { $$ = $1; }
+    : NEG      { $$ = $1; }
+    | ADD1     { $$ = $1; }
+    | NOT      { $$ = $1; }
     ;
 
 prim_app_exp2
@@ -112,13 +113,12 @@ bool_exp
     | "false"        { $$ = SLang.absyn.createBoolExp(false); }
     ;
 
-prim_op
-    :  PLUS     { $$ = $1; }
-    |  MINUS    { $$ = $1; }
-    |  TIMES    { $$ = $1; }
-    |  DIV      { $$ = $1; }
-    |  REM      { $$ = $1; }
-    | NOT        { $$ = $1; }
+prim_op2
+    : PLUS       { $$ = $1; }
+    | MINUS      { $$ = $1; }
+    | TIMES      { $$ = $1; }
+    | DIV        { $$ = $1; }
+    | REM        { $$ = $1; }
     | LT         { $$ = $1; }
     | GT         { $$ = $1; }
     | EQ         { $$ = $1; }
