@@ -21,6 +21,10 @@ LETTER                [a-zA-Z]
 "add1"                                { return 'ADD1'; }
 ","                                   { return 'COMMA'; }
 "=>"                                  { return 'THATRETURNS'; }
+"<"                                   { return 'LT'; }
+">"                                   { return 'GT'; }
+"==="                                 { return 'EQ'; }
+"not"                                 { return 'NOT'; }
 <<EOF>>                               { return 'EOF'; }
 {LETTER}({LETTER}|{DIGIT}|_)*         { return 'VAR'; }
 {DIGIT}+                              { return 'INT'; }
@@ -44,6 +48,8 @@ exp
     | app_exp       { $$ = $1; }    
     | prim_app_exp1 { $$ = $1; }
     | prim_app_exp2 { $$ = $1; }
+    | prim_app_exp  { $$ = $1; }
+    | bool_exp       { $$ = $1; }
     ;
 
 var_exp
@@ -101,12 +107,21 @@ prim_app_exp2
        { $$ = SLang.absyn.createPrim2AppExp($3,$2,$4); }
     ;
 
-prim_op2
+bool_exp
+    : "true"         { $$ = SLang.absyn.createBoolExp(true); }
+    | "false"        { $$ = SLang.absyn.createBoolExp(false); }
+    ;
+
+prim_op
     :  PLUS     { $$ = $1; }
     |  MINUS    { $$ = $1; }
     |  TIMES    { $$ = $1; }
     |  DIV      { $$ = $1; }
     |  REM      { $$ = $1; }
+    | NOT        { $$ = $1; }
+    | LT         { $$ = $1; }
+    | GT         { $$ = $1; }
+    | EQ         { $$ = $1; }
     ;
 
 args

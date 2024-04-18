@@ -51,7 +51,19 @@ function applyPrimitive(prim,args) {
         return E.createNum( 1 + E.getNumValue(args[0]) );
     case "~": 
         typeCheckPrimitiveOp(prim,args,[E.isNum]);
-        return E.createNum( - E.getNumValue(args[0]) );
+        return E.createNum( -(E.getNumValue(args[0])) );
+    case "not":
+        typeCheckPrimitiveOp(prim, args, [E.isBool]);
+        return E.createBool(!E.getBoolValue(args[0]));
+    case "<":
+        typeCheckPrimitiveOp(prim, args, [E.isNum, E.isNum]);
+        return E.createBool(E.getNumValue(args[0]) < E.getNumValue(args[1]));
+    case ">":
+        typeCheckPrimitiveOp(prim, args, [E.isNum, E.isNum]);
+        return E.createBool(E.getNumValue(args[0]) > E.getNumValue(args[1]));
+    case "===":
+        typeCheckPrimitiveOp(prim, args, [E.isNum, E.isNum]);
+        return E.createBool(E.getNumValue(args[0]) === E.getNumValue(args[1]));            
     }
 }
 function evalExp(exp,envir) {

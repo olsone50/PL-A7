@@ -54,6 +54,22 @@ function getCloEnv(value) {
     }
 }
 
+    //Problem 2
+    function createBool(b) { 
+        return ["Bool", b]; 
+    }
+    function isBool(value) { 
+        return value[0] === "Bool"; 
+    }
+    function getBoolValue(value) { 
+        if (isBool(value)) {
+            return value[1];
+        } else {
+            throw new Error("Interpreter error: "  +
+                            "The argument of getBoolValue is not a Bool value.");
+        }
+    }
+    
 // implementation of the environment
 
 // data constructors
@@ -137,6 +153,9 @@ exports.lookup = lookup;
 exports.update = update;
 exports.initEnv = initEnv;
 exports.toString = toString;
+exports.createBool = createBool;
+exports.isBool = isBool;
+exports.getBoolValue = getBoolValue;
 
 window.SLang.env = exports;
 
