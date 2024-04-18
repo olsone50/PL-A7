@@ -42,6 +42,7 @@ exp
     | fn_exp        { $$ = $1; }
     | app_exp       { $$ = $1; }    
     | prim_app_exp  { $$ = $1; }
+    | bool_exp       { $$ = $1; }
     ;
 
 var_exp
@@ -89,6 +90,11 @@ prim_app_exp
        { $$ = SLang.absyn.createPrimAppExp($1,$3); }
     ;
 
+bool_exp
+    : "true"         { $$ = SLang.absyn.createBoolExp(true); }
+    | "false"        { $$ = SLang.absyn.createBoolExp(false); }
+    ;
+
 prim_op
     :  NEG      { $$ = $1; }
     |  PLUS     { $$ = $1; }
@@ -96,6 +102,10 @@ prim_op
     |  TIMES    { $$ = $1; }
     |  DIVIDE   { $$ = $1; }
     |  ADD1     { $$ = $1; }
+    | NOT        { $$ = $1; }
+    | LT         { $$ = $1; }
+    | GT         { $$ = $1; }
+    | EQ         { $$ = $1; }
     ;
 
 args
