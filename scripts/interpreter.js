@@ -66,7 +66,7 @@ function applyPrimitive(prim,args) {
         return E.createBool(E.getNumValue(args[0]) === E.getNumValue(args[1])); 
     case "hd":
         typeCheckPrimitiveOp(prim, args, [E.isList]);
-        return E.createNum(fp.hd(E.getListValue(args))); 
+        return E.createNum(fp.hd(E.getNumValue(args[0]))); 
     case "tl":
         typeCheckPrimitiveOp(prim, args, [E.isList]);
         return E.createList(fp.tl(E.getListValue(args))); 
@@ -115,11 +115,7 @@ function evalExp(exp,envir) {
                     return evalExp(arg, envir);
                 }));
     } else if (A.isListExp(exp)) {
-        return applyPrimitive(A.getListExpValue(exp),
-            SLang.absyn.getListExpArg(exp).map(
-                function (arg) {
-                    return evalExp(arg, envir);
-                }));
+        return E.createList(A.getListExpValue(exp));
     } else {
         throw "Error: Attempting to evaluate an invalid expression";
     }
