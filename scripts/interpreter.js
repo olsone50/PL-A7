@@ -51,7 +51,7 @@ function applyPrimitive(prim,args) {
         return E.createNum( 1 + E.getNumValue(args[0]) );
     case "~": 
         typeCheckPrimitiveOp(prim,args,[E.isNum]);
-        return E.createNum( -(E.getNumValue(args[0])) );
+        return E.createNum( -1 * E.getNumValue(args[0]) );
     case "not":
         typeCheckPrimitiveOp(prim, args, [E.isBool]);
         return E.createBool(!E.getBoolValue(args[0]));
@@ -63,7 +63,17 @@ function applyPrimitive(prim,args) {
         return E.createBool(E.getNumValue(args[0]) > E.getNumValue(args[1]));
     case "===":
         typeCheckPrimitiveOp(prim, args, [E.isNum, E.isNum]);
-        return E.createBool(E.getNumValue(args[0]) === E.getNumValue(args[1]));            
+        return E.createBool(E.getNumValue(args[0]) === E.getNumValue(args[1])); 
+    case "hd":
+        typeCheckPrimitiveOp(prim, args, [E.isList]);
+        return E.createNum(fp.hd(E.getListValue(args))); 
+    case "tl":
+        typeCheckPrimitiveOp(prim, args, [E.isList]);
+        return E.createList(fp.tl(E.getListValue(args))); 
+    case "isNull":
+        typeCheckPrimitiveOp(prim, args, [E.isList]);
+        return E.createBool(fp.isNull(E.getListValue(args))); 
+                     
     }
 }
 function evalExp(exp,envir) {
@@ -101,6 +111,12 @@ function evalExp(exp,envir) {
     } else if (A.isPrim2AppExp(exp)) {
         return applyPrimitive(A.getPrim2AppExpPrim(exp),
             SLang.absyn.getPrim2AppExpArgs(exp).map(
+                function (arg) {
+                    return evalExp(arg, envir);
+                }));
+    } else if (A.isListExp(exp)) {
+        return applyPrimitive(A.getListExpValue(exp),
+            SLang.absyn.getListExpArg(exp).map(
                 function (arg) {
                     return evalExp(arg, envir);
                 }));
