@@ -73,7 +73,7 @@ fn_exp
 
 formals
     : /* empty */ { $$ = [ ]; }
-    | VAR moreformals 
+    | INT moreformals 
         { var result;
           if ($2 === [ ])
              result = [ $1 ];
@@ -87,7 +87,7 @@ formals
 
 moreformals
     : /* empty */ { $$ = [ ] }
-    | COMMA VAR moreformals 
+    | COMMA INT moreformals 
        { $3.unshift($2); 
          $$ = $3; }
     ;
@@ -123,11 +123,8 @@ bool_exp
     ;
 
 list_exp
-    : /* empty */ { $$ = [ ]; }
-    | LBRAC list_exp RBRAC { $$ = SLang.absyn.createListExp($1)}
-    | prim_op1 LPAREN LBRAC list_exp RBRAC RPAREN { $$ = SLang.absyn.createListExp($1,$4)}
-    | exp         { $$ = $1; }
-    | exp COMMA exp         { $$ = $1,$3; }
+    : LBRAC formals RBRAC 
+        { $$ = SLang.absyn.createListExp($2); }
     ;
 
 prim_op2
