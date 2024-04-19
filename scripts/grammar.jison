@@ -21,6 +21,7 @@ LETTER                [a-zA-Z]
 "%"                                   { return 'REM'; }
 "~"                                   { return 'NEG'; }
 "add1"                                { return 'ADD1'; }
+"::"                                  { return 'CONS'; }
 "hd"                                  { return 'HD'; }
 "tl"                                  { return 'TL'; }
 "isNull"                              { return 'ISNULL'; }
@@ -53,7 +54,6 @@ exp
     | app_exp       { $$ = $1; }    
     | prim_app_exp1 { $$ = $1; }
     | prim_app_exp2 { $$ = $1; }
-    | prim_app_exp  { $$ = $1; }
     | bool_exp      { $$ = $1; }
     | list_exp      { $$ = $1; }
     ;
@@ -63,7 +63,7 @@ var_exp
     ;
 
 intlit_exp
-    : INT  { $$ =SLang.absyn.createIntExp( $1 ); }
+    : INT  { $$ = SLang.absyn.createIntExp( $1 ); }
     ;
 
 fn_exp
@@ -73,7 +73,7 @@ fn_exp
 
 formals
     : /* empty */ { $$ = [ ]; }
-    | INT moreformals 
+    | VAR moreformals 
         { var result;
           if ($2 === [ ])
              result = [ $1 ];
@@ -87,7 +87,28 @@ formals
 
 moreformals
     : /* empty */ { $$ = [ ] }
-    | COMMA INT moreformals 
+    | COMMA VAR moreformals 
+       { $3.unshift($2); 
+         $$ = $3; }
+    ;
+
+forms
+    : /* empty */ { $$ = [ ]; }
+    | INT moreforms 
+        { var result;
+          if ($2 === [ ])
+             result = [ $1 ];
+          else {
+             $2.unshift($1);
+             result = $2;
+          }
+          $$ = result;
+        }
+    ;
+
+moreforms
+    : /* empty */ { $$ = [ ] }
+    | COMMA INT moreforms 
        { $3.unshift($2); 
          $$ = $3; }
     ;
@@ -123,7 +144,7 @@ bool_exp
     ;
 
 list_exp
-    : LBRAC formals RBRAC 
+    : LBRAC forms RBRAC 
         { $$ = SLang.absyn.createListExp($2); }
     ;
 
@@ -136,6 +157,7 @@ prim_op2
     | LT         { $$ = $1; }
     | GT         { $$ = $1; }
     | EQ         { $$ = $1; }
+    | CONS       { $$ = $1; }
     ;
 
 args
