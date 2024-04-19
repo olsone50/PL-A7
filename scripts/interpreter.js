@@ -66,13 +66,16 @@ function applyPrimitive(prim,args) {
         return E.createBool(E.getNumValue(args[0]) === E.getNumValue(args[1])); 
     case "hd":
         typeCheckPrimitiveOp(prim, args, [E.isList]);
-        return E.createNum(fp.hd(E.getNumValue(args[0]))); 
+        return E.createNum(fp.hd(E.getListValue(args[0]))); 
     case "tl":
         typeCheckPrimitiveOp(prim, args, [E.isList]);
-        return E.createList(fp.tl(E.getListValue(args))); 
+        return E.createList(fp.tl(E.getListValue(args[0]))); 
     case "isNull":
         typeCheckPrimitiveOp(prim, args, [E.isList]);
-        return E.createBool(fp.isNull(E.getListValue(args))); 
+        return E.createBool(fp.isNull(E.getListValue(args[0]))); 
+    case "::":
+        typeCheckPrimitiveOp(prim, args, [E.isNum, E.isList]);
+        return E.createList(fp.cons(E.getNumValue(args[0]), E.getListValue(args[1]))); 
                      
     }
 }
