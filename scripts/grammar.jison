@@ -123,8 +123,7 @@ bool_exp
     ;
 
 list_exp
-    : prim_op1 LPAREN LBRAC prim_args RBRAC RPAREN
-        { $$ = SLang.absyn.createListExp($1,$4)}
+    : prim_op1 LPAREN LBRAC prim_args RBRAC RPAREN { $$ = SLang.absyn.createPrim1AppExp($1,$4)}
     ;
 
 prim_op2
