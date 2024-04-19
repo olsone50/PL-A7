@@ -152,6 +152,30 @@
                                 "The argument of getBoolExpValue is not a BoolExp.");
             }
         }
+
+        //Problem 3
+        function createListExp(prim,arg) {
+            return ["ListExp",prim,arg];
+        }
+        function isListExp(e) { 
+            return e[0] === "ListExp"; 
+        }
+        function getListExpValue(e) { 
+            if (isListExp(e)) {
+                return e[1];
+            } else {
+                throw new Error("Interpreter error: The "  +
+                                "argument of getListExpValue is not a ListExp.");
+            }
+        }
+        function getListExpArg(e) { 
+            if (isListExp(e)) {
+                return [e[2]];
+            } else {
+                throw new Error("Interpreter error: The "  +
+                                "argument of getListExpArg is not a ListExp.");
+            }
+        }
     
     exports.createProgram = createProgram;
     exports.isProgram = isProgram;
@@ -181,6 +205,10 @@
     exports.createBoolExp = createBoolExp;
     exports.isBoolExp = isBoolExp;
     exports.getBoolExpValue = getBoolExpValue;  
+    exports.createListExp = createListExp;
+    exports.isListExp = isListExp;
+    exports.getListExpValue = getListExpValue;
+    exports.getListExpArg = getListExpArg;
     
     window.SLang.absyn = exports;
     }());
